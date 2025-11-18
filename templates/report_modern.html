@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>OCT Diagnostic Report</title>
+<style>
+    body {
+        font-family: 'Helvetica', sans-serif;
+        margin: 40px;
+        color: #222;
+    }
+    h1 {
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 6px;
+    }
+    .subtext {
+        text-align: center;
+        font-size: 12px;
+        color: #888;
+        margin-bottom: 30px;
+    }
+    .section-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-top: 28px;
+        margin-bottom: 10px;
+        border-left: 4px solid #4B8CF4;
+        padding-left: 10px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-top: 10px;
+        font-size: 14px;
+    }
+    th {
+        background: #4B8CF4;
+        color: white;
+        padding: 8px;
+        text-align: left;
+    }
+    td {
+        padding: 8px;
+        border-bottom: 1px solid #dadada;
+    }
+    .footer {
+        margin-top: 40px;
+        font-size: 12px;
+        text-align: center;
+        color: #777;
+    }
+</style>
+</head>
+<body>
+
+<h1>OCT Diagnostic Report</h1>
+<p class="subtext">Generated using AI-assisted retinal imaging analysis</p>
+
+<p><b>Scan ID:</b> {{ data.image_id }}</p>
+
+<div class="section-title">Disease Probability Analysis</div>
+<table>
+    <tr><th>Disease</th><th>Probability</th></tr>
+    {% for disease, prob in data.predictions.items() %}
+    <tr>
+        <td>{{ disease }}</td>
+        <td>{{ "%.2f"|format(prob * 100) }}%</td>
+    </tr>
+    {% endfor %}
+    </table>
+
+<div class="section-title">Retinal Layer Thickness (µm)</div>
+<table>
+    <tr><th>Layer</th><th>Thickness</th></tr>
+    {% for layer, value in data.retinal_layer_thickness.items() %}
+    <tr>
+        <td>{{ layer }}</td>
+        <td>{{ value }} µm</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<p class="footer">
+This report is automatically generated and intended for clinical review assistance.
+It should not be used as the sole basis for diagnosis.
+</p>
+
+</body>
+</html>
+

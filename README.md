@@ -1,6 +1,6 @@
-# OCT Flask Backend (Dummy)
+# OCT Flask Backend
 
-Simple Flask backend exposing endpoints for OCT analysis with dummy outputs.
+Flask backend exposing endpoints for OCT analysis.
 
 ## Endpoints
 - POST `/upload`
@@ -20,6 +20,6 @@ flask run --host=0.0.0.0 --port=5000
 
 ## Notes
 - Uploads saved in `uploads/`.
-- Dummy links use `https://your-server.com` as base; adjust in `config.py`.
+- Links use `http://localhost:5000/` as base; adjust in `config.py`.
 - CORS enabled for all origins by default.
 

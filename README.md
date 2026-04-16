@@ -1,12 +1,19 @@
-# OCT Flask Backend
+# Retinal AI Flask Backend
 
-Flask backend exposing endpoints for OCT analysis.
+Flask backend exposing multi-modality retinal AI APIs (OCT, fundus, etc).
 
-## Endpoints
-- POST `/upload`
-- GET `/predict/<image_id>`
-- GET `/mask/<image_id>`
-- GET `/report/<image_id>`
+## API Endpoints
+
+Preferred versioned endpoints for frontend:
+- `GET /api/v1/health`
+- `GET /api/v1/modalities`
+- `POST /api/v1/images` (`multipart/form-data` with `image` and `modality`)
+- `GET /api/v1/images/<image_id>/predict`
+- `GET /api/v1/images/<image_id>/report`
+
+Response envelope:
+- Success: `{ "status": "success", "timestamp": "...", "data": { ... } }`
+- Error: `{ "status": "error", "timestamp": "...", "error": { "code": 400, "type": "...", "message": "..." } }`
 
 ## Setup (Windows PowerShell)
 ```powershell
@@ -20,6 +27,8 @@ flask run --host=0.0.0.0 --port=5000
 
 ## Notes
 - Uploads saved in `uploads/`.
-- Links use `http://localhost:5000/` as base; adjust in `config.py`.
+- Upload metadata (including modality) is stored in `uploads/image_metadata.json`.
+- Supported modalities are configured in `config.py` under `MODEL_SPECS`.
+- Modality class display names are configured in `config.py` under `CLASS_FULL_NAMES_BY_MODALITY`.
 - CORS enabled for all origins by default.
 

@@ -2,91 +2,270 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>OCT Diagnostic Report</title>
+<title>Retinal AI Report</title>
 <style>
+    :root {
+        --bg: #f7f9fc;
+        --card: #ffffff;
+        --text: #111827;
+        --muted: #6b7280;
+        --primary: #4B8CF4;
+        --primary-2: #2563eb;
+        --border: rgba(17, 24, 39, 0.10);
+        --shadow: 0 10px 30px rgba(17, 24, 39, 0.06);
+    }
+
     body {
-        font-family: 'Helvetica', sans-serif;
-        margin: 40px;
-        color: #222;
+        font-family: Helvetica, Arial, sans-serif;
+        margin: 32px;
+        color: var(--text);
+        background: var(--bg);
     }
+
+    .container {
+        max-width: 980px;
+        margin: 0 auto;
+    }
+
+    .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        box-shadow: var(--shadow);
+        padding: 22px 24px;
+        margin-bottom: 18px;
+    }
+
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 12px;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 14px;
+    }
+
+    .title {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
     h1 {
-        font-weight: 600;
-        text-align: center;
-        margin-bottom: 6px;
+        font-weight: 700;
+        text-align: left;
+        margin: 0;
+        font-size: 22px;
     }
+
     .subtext {
-        text-align: center;
+        font-size: 12.5px;
+        color: var(--muted);
+        margin: 0;
+    }
+
+    .meta {
+        text-align: right;
+        min-width: 260px;
+        color: var(--muted);
         font-size: 12px;
-        color: #888;
-        margin-bottom: 30px;
+        line-height: 1.4;
     }
-    .section-title {
-        font-size: 16px;
+
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(37, 99, 235, 0.25);
+        background: rgba(37, 99, 235, 0.08);
+        color: var(--primary-2);
         font-weight: 600;
-        margin-top: 28px;
-        margin-bottom: 10px;
-        border-left: 4px solid #4B8CF4;
-        padding-left: 10px;
+        font-size: 12px;
+        gap: 8px;
+        white-space: nowrap;
     }
+
+    .section {
+        margin-top: 8px;
+    }
+
+    .section-title {
+        font-size: 14.5px;
+        font-weight: 700;
+        margin: 0 0 10px 0;
+        color: var(--text);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .section-title::before {
+        content: "";
+        width: 10px;
+        height: 10px;
+        border-radius: 3px;
+        background: var(--primary);
+        display: inline-block;
+    }
+
     table {
         width: 100%;
         border-collapse: collapse;
-        border-radius: 8px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
         overflow: hidden;
-        margin-top: 10px;
+        margin-top: 8px;
         font-size: 14px;
+        background: #fff;
     }
+
     th {
-        background: #4B8CF4;
-        color: white;
-        padding: 8px;
+        background: rgba(75, 140, 244, 0.10);
+        color: var(--primary-2);
+        padding: 10px 12px;
         text-align: left;
+        font-weight: 700;
+        border-bottom: 1px solid var(--border);
     }
+
     td {
-        padding: 8px;
-        border-bottom: 1px solid #dadada;
+        padding: 10px 12px;
+        border-bottom: 1px solid rgba(17, 24, 39, 0.06);
+        vertical-align: middle;
     }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    .muted {
+        color: var(--muted);
+    }
+
+    .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+    }
+
     .footer {
-        margin-top: 40px;
+        margin-top: 22px;
         font-size: 12px;
+        color: var(--muted);
         text-align: center;
-        color: #777;
+    }
+
+    .note {
+        padding: 12px 14px;
+        background: rgba(37, 99, 235, 0.06);
+        border: 1px solid rgba(37, 99, 235, 0.18);
+        border-radius: 12px;
+        color: #1f3a8a;
+        font-size: 13px;
+        line-height: 1.45;
+    }
+
+    @media print {
+        body { background: #fff; margin: 0; }
+        .card { box-shadow: none; border: 1px solid #e5e7eb; }
+        .container { max-width: none; padding: 0 16px; }
     }
 </style>
 </head>
 <body>
+<div class="container">
+    <div class="card">
+        <div class="header">
+            <div class="title">
+                <h1>Retinal AI Report</h1>
+                <p class="subtext">Generated using AI-assisted retinal imaging analysis</p>
+            </div>
+            <div class="meta">
+                <div><span class="muted">Scan ID:</span> <b>{{ data.image_id }}</b></div>
+                {% if data.modality %}
+                <div><span class="muted">Modality:</span> <b>{{ data.modality }}</b></div>
+                {% endif %}
+                {% if data.generated_at %}
+                <div><span class="muted">Generated:</span> <b>{{ data.generated_at }}</b></div>
+                {% endif %}
+            </div>
+        </div>
 
-<h1>OCT Diagnostic Report</h1>
-<p class="subtext">Generated using AI-assisted retinal imaging analysis</p>
+        <div class="section">
+            {% if data.top_label %}
+                <div class="badge">
+                    Top prediction: <span><b>{{ data.top_label }}</b></span>
+                    {% if data.confidence is not none %}
+                    <span class="muted">({{ "%.1f"|format(data.confidence * 100) }}%)</span>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
 
-<p><b>Scan ID:</b> {{ data.image_id }}</p>
+        {% if data.summary or data.recommendation %}
+        <div class="section" style="margin-top: 14px;">
+            <div class="two-col">
+                {% if data.summary %}
+                <div>
+                    <div class="section-title" style="margin-bottom: 8px;">Summary</div>
+                    <div class="note">{{ data.summary }}</div>
+                </div>
+                {% endif %}
+                {% if data.recommendation %}
+                <div>
+                    <div class="section-title" style="margin-bottom: 8px;">Recommendation</div>
+                    <div class="note">{{ data.recommendation }}</div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
 
-<div class="section-title">Disease Probability Analysis</div>
-<table>
-    <tr><th>Disease</th><th>Probability</th></tr>
-    {% for disease, prob in data.predictions.items() %}
-    <tr>
-        <td>{{ disease }}</td>
-        <td>{{ "%.2f"|format(prob * 100) }}%</td>
-    </tr>
-    {% endfor %}
-    </table>
+        <div class="section" style="margin-top: 18px;">
+            <div class="section-title">Disease Probability Analysis</div>
+            <table id="predictionTable">
+                <thead>
+                    <tr>
+                        <th style="width: 70%;">Disease</th>
+                        <th style="width: 30%;">Probability</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for disease, prob in data.predictions.items() %}
+                    <tr data-prob="{{ prob }}">
+                        <td>
+                            <span><b>{{ disease }}</b></span>
+                            {% if data.top_label and disease == data.top_label %}
+                                <span style="margin-left: 10px;" class="badge">Top</span>
+                            {% endif %}
+                        </td>
+                        <td><b>{{ "%.2f"|format(prob * 100) }}%</b></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-<div class="section-title">Retinal Layer Thickness (µm)</div>
-<table>
-    <tr><th>Layer</th><th>Thickness</th></tr>
-    {% for layer, value in data.retinal_layer_thickness.items() %}
-    <tr>
-        <td>{{ layer }}</td>
-        <td>{{ value }} µm</td>
-    </tr>
-    {% endfor %}
-</table>
+        <div class="footer">
+            This report is automatically generated and intended for clinical review assistance.
+            It should not be used as the sole basis for diagnosis.
+        </div>
+    </div>
+</div>
 
-<p class="footer">
-This report is automatically generated and intended for clinical review assistance.
-It should not be used as the sole basis for diagnosis.
-</p>
+<script>
+    // Sort predictions by probability descending for easier reading.
+    (function() {
+        const table = document.getElementById('predictionTable');
+        if (!table) return;
+        const tbody = table.tBodies[0];
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+        rows.sort((a, b) => parseFloat(b.dataset.prob) - parseFloat(a.dataset.prob));
+        rows.forEach(r => tbody.appendChild(r));
+    })();
+</script>
 
 </body>
 </html>

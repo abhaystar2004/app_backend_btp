@@ -4,3 +4,6 @@ Werkzeug==3.0.3
 reportlab==4.2.5
 tensorflow==2.19.0
 numpy==1.26.4
+Pillow
+torch
+torchvision

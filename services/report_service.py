@@ -17,6 +17,13 @@ from reportlab.platypus import (
 )
 
 
+def _modality_display(modality: str) -> str:
+	value = (modality or "").strip()
+	if not value:
+		return "Retinal"
+	return value.upper() if len(value) <= 3 else value.title()
+
+
 def _safe_image(path: str | None, width: float, height: float):
 	if not path:
 		return None
@@ -37,11 +44,13 @@ def build_diagnostic_pdf(
 	class_full_names_by_modality: dict[str, dict[str, str]] | None = None,
 ) -> str:
 	generated_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+	modality_display = _modality_display(modality)
+	report_title = f"{modality_display} Diagnostic Report"
 	pdf_path = os.path.join(reports_folder, f"{image_id}_report.pdf")
 	doc = SimpleDocTemplate(
 		pdf_path,
 		pagesize=A4,
-		title="OCT Diagnostic Report",
+		title=report_title,
 		leftMargin=36,
 		rightMargin=36,
 		topMargin=48,
@@ -51,11 +60,11 @@ def build_diagnostic_pdf(
 	elements = []
 
 	# Title and subtitle
-	elements.append(Paragraph("OCT Diagnostic Report", styles["Title"]))
+	elements.append(Paragraph(report_title, styles["Title"]))
 	elements.append(Paragraph("Generated using AI-assisted retinal imaging analysis", styles["Italic"]))
 	elements.append(Spacer(1, 12))
 	elements.append(Paragraph(f"Scan ID: <b>{image_id}</b>", styles["Normal"]))
-	elements.append(Paragraph(f"Modality: <b>{modality}</b>", styles["Normal"]))
+	elements.append(Paragraph(f"Modality: <b>{modality_display}</b>", styles["Normal"]))
 	elements.append(Paragraph(f"Generated: {generated_at}", styles["Normal"]))
 	elements.append(Spacer(1, 18))
 
